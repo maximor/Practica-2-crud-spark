@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="plugins/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="plugins/bootstrap/dist/css/bootstrap-theme.css">
+</head>
+<body>
+##    menu
+    #parse("plantillas/menu.vtl")
+    <div class="container">
+        <div class="box-header with-border">
+            <h3 class="box-title">Crear Estudiantes</h3>
+        </div>
+        <form class="form-horizontal" method="post" action="/crear-estudiante">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Matrícula</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="matricula" name="matricula" placeholder="" value="#if($estudiante.getMatricula())$estudiante.getMatricula()#end" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-2 control-label">Nombre</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="" value="#if($estudiante.getNombre())$estudiante.getNombre()#end" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="apellido" class="col-sm-2 control-label">Apellido</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="apellido" name="apellido" value="#if($estudiante.getApellido())$estudiante.getApellido()#end" placeholder="" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="telefono" class="col-sm-2 control-label">Telefono</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="telefono" name="telefono" value="#if($estudiante.getTelefono())$estudiante.getTelefono()#end" placeholder="" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    #if($estudiante)
+                        <button type="submit" class="btn btn-default" name="actualizar" value="actualizar">Actualizar</button>
+                        <button type="submit" class="btn btn-danger" name="borrar" value="borrar">Borrar</button>
+                    #else
+                    <button type="submit" class="btn btn-info" name="crear" value="crear">Crear</button>
+                    #end
+
+##                    <button class="btn btn-danger" onclick="cancelar()">Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+<script src="plugins/bootstrap/dist/js/bootstrap.js"></script>
+<script>
+    var matricula = document.getElementById('matricula');
+    var nombre = document.getElementById('nombre');
+    var apellido = document.getElementById('apellido');
+    var telefono = document.getElementById('telefono');
+
+    var validar = function () {
+        if(matricula || nombre || apellido || telefono){
+            alert("No puede dejar ningún campo vacío!");
+            return false
+        }
+
+        return true;
+    }
+
+    var cancelar = function () {
+        matricula.innerHTML = "";
+        nombre.innerHTML = "";
+        apellido.innerHTML = "";
+        telefono.innerHTML = "";
+    }
+</script>
+</body>
+</html>
