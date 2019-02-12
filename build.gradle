@@ -14,4 +14,8 @@ dependencies {
     compile "com.sparkjava:spark-core:2.7.2" // add to build.gradle (for Java users)
     // https://mvnrepository.com/artifact/org.apache.velocity/velocity
     compile group: 'org.apache.velocity', name: 'velocity', version: '1.7'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    compile "org.slf4j:slf4j-simple:1.7.21"
+
+
 }

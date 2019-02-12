@@ -46,25 +46,9 @@ public class EstudianteController {
                 for(int i = 0; i < listaEstudiante.size(); i++){
                     if(listaEstudiante.get(i).getMatricula() == matricula){
                         crear.put("estudiante", listaEstudiante.get(i));
-                        listaPosition = i;
+                        req.session().attribute("listaPosition", i);
                         i = listaEstudiante.size();
                     }
-                }
-
-                try {
-                    if (req.queryParams("actualizar").equals("actualizar")) {
-                        listaEstudiante.set(listaPosition, new Estudiante(
-                                Integer.valueOf(req.queryParams("matricula")),
-                                req.queryParams("nombre"),
-                                req.queryParams("apellido"),
-                                req.queryParams("telefono")
-                        ));
-                        req.session().attribute("listaEstudiante", listaEstudiante);
-                    } else if (req.queryParams("borrar").equals("borrar")) {
-                        listaEstudiante.remove(listaPosition);
-                    }
-                }catch (Exception e){
-                    System.out.println(e.getMessage());
                 }
             }
             return new ModelAndView(crear, "plantillas/crear-estudiante.vtl");
@@ -73,22 +57,49 @@ public class EstudianteController {
         post("/crear-estudiante", (req, res) -> {
             List<Estudiante> estudiantes = new ArrayList<>();
 
-            if(req.queryParams("crear").equals("crear")){
-                try {
-                    if (req.session().attribute("listaEstudiante") != null) {
-                        estudiantes = req.session().attribute("listaEstudiante");
-                    }
+            if(req.session().attribute("listaEstudiante") != null){
+                estudiantes = req.session().attribute("listaEstudiante");
+            }
 
-                    estudiantes.add(new Estudiante(
+            if(req.queryParams("crear") != null || req.queryParams("actualizar") != null || req.queryParams("borrar") != null) {
+                String crear =req.queryParams("crear");
+                if (crear != null && crear.equals("crear")) {
+                    try {
+                        if (req.session().attribute("listaEstudiante") != null) {
+                            estudiantes = req.session().attribute("listaEstudiante");
+                        }
+
+                        estudiantes.add(new Estudiante(
+                                Integer.valueOf(req.queryParams("matricula")),
+                                req.queryParams("nombre"),
+                                req.queryParams("apellido"),
+                                req.queryParams("telefono")));
+                        req.session().attribute("listaEstudiante", estudiantes);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                System.out.println(" hola" + req.queryParams());
+                String actualizar = req.queryParams("actualizar");
+                if (actualizar != null && actualizar.equals("actualizar")) {
+                    System.out.println("Indice: " + req.session().attribute("listaPosition"));
+                    estudiantes.set(req.session().attribute("listaPosition"), new Estudiante(
                             Integer.valueOf(req.queryParams("matricula")),
                             req.queryParams("nombre"),
                             req.queryParams("apellido"),
-                            req.queryParams("telefono")));
+                            req.queryParams("telefono")
+                    ));
+
                     req.session().attribute("listaEstudiante", estudiantes);
-                }catch(Exception e){
-                    System.out.println(e.getMessage());
+                }
+
+                String valor = req.queryParams("borrar");
+                if (valor != null && valor.equals("borrar")) {
+                    estudiantes.remove(estudiantes.get(req.session().attribute("listaPosition")));
+                    req.session().attribute("listaEstudiante", estudiantes);
                 }
             }
+
 
             return new ModelAndView(new HashMap<>(), "plantillas/crear-estudiante.vtl");
         }, new VelocityTemplateEngine());

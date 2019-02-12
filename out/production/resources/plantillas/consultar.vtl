@@ -27,7 +27,7 @@
                     #foreach( $estudiante in $estudiantes )
                         <tr>
                             #if($estudiante)
-                                <td><button class="btn btn-info" onclick="window.location.href='http://localhost/crear-estudiante/$estudiante.getMatricula()'">Editar</button></td>
+                                <td><button class="btn btn-info" onclick="window.location.href='../crear-estudiante/$estudiante.getMatricula()'">Editar</button></td>
                                 <td>$estudiante.getMatricula()</td>
                                 <td>$estudiante.getNombre() $estudiante.getApellido()</td>
                                 <td><span class="badge bg-red">$estudiante.getTelefono()</span></td>
